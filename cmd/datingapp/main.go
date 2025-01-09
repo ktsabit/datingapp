@@ -5,9 +5,12 @@ import (
 	"datingapp/internal/handlers"
 	"datingapp/internal/repositories"
 	"datingapp/internal/routes"
+	"datingapp/internal/services"
 	"github.com/joho/godotenv"
 	"log"
 	"net/http"
+	"os"
+	"time"
 )
 
 func main() {
@@ -16,10 +19,21 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 
+	jwtService := services.NewJWTService(services.JWTConfig{
+		AccessTokenSecret:  os.Getenv("ACCESS_TOKEN_SECRET"),
+		RefreshTokenSecret: os.Getenv("REFRESH_TOKEN_SECRET"),
+		AccessTokenTTL:     15 * time.Minute,
+		RefreshTokenTTL:    30 * 24 * time.Hour,
+	})
+
 	db := configs.InitDB()
 	userRepo := repositories.NewUserRepository(db)
-	userHandler := handlers.NewUserHandler(userRepo)
-	router := routes.SetupRoutes(userHandler)
+	userService := services.NewUserService(userRepo)
+	userHandler := handlers.NewUserHandler(userService)
+
+	authHandler := handlers.NewAuthHandler(userRepo, jwtService)
+
+	router := routes.SetupRoutes(userHandler, authHandler, jwtService)
 
 	err = http.ListenAndServe(":8080", router)
 	if err != nil {

@@ -1,29 +1,26 @@
-package configs
+package services
 
 import (
 	"datingapp/internal/models"
 	"github.com/go-chi/jwtauth"
-	"os"
 	"time"
 )
-
-var tokenAuth *jwtauth.JWTAuth
-
-func init() {
-	tokenAuth = jwtauth.New("HS256", []byte(os.Getenv("JWT_KEY")), nil)
-}
 
 type JWTConfig struct {
 	AccessTokenSecret  string
 	RefreshTokenSecret string
-	AccessTokenTTL     time.Duration // e.g., 15 minutes
-	RefreshTokenTTL    time.Duration // e.g., 7 days
+	AccessTokenTTL     time.Duration
+	RefreshTokenTTL    time.Duration
 }
 
 type JWTService struct {
 	accessAuth  *jwtauth.JWTAuth
 	refreshAuth *jwtauth.JWTAuth
 	config      JWTConfig
+}
+
+func (s *JWTService) TokenAuth() *jwtauth.JWTAuth {
+	return s.accessAuth
 }
 
 func NewJWTService(config JWTConfig) *JWTService {
@@ -43,7 +40,11 @@ func (s *JWTService) GenerateTokenPair(userID uint) (*models.TokenResponse, erro
 		"iat":     now.Unix(),
 		"type":    "access",
 	}
-	_, accessToken, _ := s.accessAuth.Encode(accessClaims)
+	_, accessToken, err := s.accessAuth.Encode(accessClaims)
+
+	if err != nil {
+		return nil, err
+	}
 
 	refreshClaims := map[string]interface{}{
 		"user_id": userID,
@@ -51,7 +52,11 @@ func (s *JWTService) GenerateTokenPair(userID uint) (*models.TokenResponse, erro
 		"iat":     now.Unix(),
 		"type":    "refresh",
 	}
-	_, refreshToken, _ := s.refreshAuth.Encode(refreshClaims)
+	_, refreshToken, err := s.refreshAuth.Encode(refreshClaims)
+
+	if err != nil {
+		return nil, err
+	}
 
 	return &models.TokenResponse{
 		AccessToken:  accessToken,

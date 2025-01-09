@@ -9,11 +9,11 @@ import (
 )
 
 type UserHandler struct {
-	Service services.UserService
+	Service *services.UserService
 }
 
 func NewUserHandler(s *services.UserService) *UserHandler {
-	return &UserHandler{Service: services.UserService{}}
+	return &UserHandler{Service: s}
 }
 
 func (h *UserHandler) Register(w http.ResponseWriter, r *http.Request) {

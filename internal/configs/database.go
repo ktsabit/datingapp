@@ -12,9 +12,6 @@ import (
 func InitDB() *gorm.DB {
 
 	dbHost := os.Getenv("DB_HOST")
-
-	log.Println(dbHost)
-
 	dsn := fmt.Sprintf("host=%s user=admin password=admin123 dbname=datingapp port=5432 sslmode=disable", dbHost)
 
 	db, err := gorm.Open(postgres.New(postgres.Config{

@@ -15,7 +15,7 @@ func NewUserService(r *repositories.UserRepository) *UserService {
 	return &UserService{Repository: r}
 }
 
-func (us *UserService) Register(ctx context.Context, userReq models.RegisterRequest) (models.User, error) {
+func (s *UserService) Register(ctx context.Context, userReq models.RegisterRequest) (models.User, error) {
 	hash, err := GetPasswordHash(userReq.Password)
 	if err != nil {
 		return models.User{}, err
@@ -27,7 +27,7 @@ func (us *UserService) Register(ctx context.Context, userReq models.RegisterRequ
 		Password: hash,
 	}
 
-	err = us.Repository.CreateUser(ctx, &user)
+	err = s.Repository.CreateUser(ctx, &user)
 	if err != nil {
 		return models.User{}, err
 	}

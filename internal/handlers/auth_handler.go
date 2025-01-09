@@ -1,9 +1,9 @@
 package handlers
 
 import (
-	"datingapp/internal/configs"
 	"datingapp/internal/models"
 	"datingapp/internal/repositories"
+	"datingapp/internal/services"
 	"encoding/json"
 	"golang.org/x/crypto/bcrypt"
 	"log"
@@ -12,10 +12,10 @@ import (
 
 type AuthHandler struct {
 	userRepo   *repositories.UserRepository
-	jwtService *configs.JWTService
+	jwtService *services.JWTService
 }
 
-func NewAuthHandler(userRepo *repositories.UserRepository, jwtService *configs.JWTService) *AuthHandler {
+func NewAuthHandler(userRepo *repositories.UserRepository, jwtService *services.JWTService) *AuthHandler {
 	return &AuthHandler{
 		userRepo:   userRepo,
 		jwtService: jwtService,
@@ -83,5 +83,3 @@ func (h *AuthHandler) Refresh(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
-
-func (h *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {}
