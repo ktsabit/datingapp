@@ -11,11 +11,11 @@ import (
 )
 
 type AuthHandler struct {
-	userRepo   *repositories.UserRepository
-	jwtService *services.JWTService
+	userRepo   repositories.UserRepositoryInterface
+	jwtService services.JWTServiceInterface
 }
 
-func NewAuthHandler(userRepo *repositories.UserRepository, jwtService *services.JWTService) *AuthHandler {
+func NewAuthHandler(userRepo repositories.UserRepositoryInterface, jwtService services.JWTServiceInterface) *AuthHandler {
 	return &AuthHandler{
 		userRepo:   userRepo,
 		jwtService: jwtService,

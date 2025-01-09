@@ -9,9 +9,9 @@ import (
 )
 
 func SetupRoutes(
-	userHandler *handlers.UserHandler,
-	authHandler *handlers.AuthHandler,
-	jwtService *services.JWTService,
+	userHandler handlers.UserHandlerInterface,
+	authHandler handlers.AuthHandlerInterface,
+	jwtService services.JWTServiceInterface,
 ) *chi.Mux {
 	r := chi.NewRouter()
 

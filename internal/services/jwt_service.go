@@ -23,7 +23,7 @@ func (s *JWTService) TokenAuth() *jwtauth.JWTAuth {
 	return s.accessAuth
 }
 
-func NewJWTService(config JWTConfig) *JWTService {
+func NewJWTService(config JWTConfig) JWTServiceInterface {
 	return &JWTService{
 		accessAuth:  jwtauth.New("HS256", []byte(config.AccessTokenSecret), nil),
 		refreshAuth: jwtauth.New("HS256", []byte(config.RefreshTokenSecret), nil),

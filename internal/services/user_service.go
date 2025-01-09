@@ -4,14 +4,15 @@ import (
 	"context"
 	"datingapp/internal/models"
 	"datingapp/internal/repositories"
+	"errors"
 	"golang.org/x/crypto/bcrypt"
 )
 
 type UserService struct {
-	Repository *repositories.UserRepository
+	Repository repositories.UserRepositoryInterface
 }
 
-func NewUserService(r *repositories.UserRepository) *UserService {
+func NewUserService(r repositories.UserRepositoryInterface) *UserService {
 	return &UserService{Repository: r}
 }
 
@@ -19,6 +20,11 @@ func (s *UserService) Register(ctx context.Context, userReq models.RegisterReque
 	hash, err := GetPasswordHash(userReq.Password)
 	if err != nil {
 		return models.User{}, err
+	}
+
+	emailExist := s.Repository.EmailExist(ctx, userReq.Email)
+	if emailExist {
+		return models.User{}, errors.New("email exist")
 	}
 
 	user := models.User{
