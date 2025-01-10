@@ -28,12 +28,14 @@ func main() {
 
 	db := configs.InitDB()
 	userRepo := repositories.NewUserRepository(db)
+	swipeRepo := repositories.NewSwipeRepository(db)
 	userService := services.NewUserService(userRepo)
+	swipeService := services.NewSwipeService(swipeRepo)
 	userHandler := handlers.NewUserHandler(userService)
-
+	swipeHandler := handlers.NewSwipeHandler(swipeService)
 	authHandler := handlers.NewAuthHandler(userRepo, jwtService)
 
-	router := routes.SetupRoutes(userHandler, authHandler, jwtService)
+	router := routes.SetupRoutes(userHandler, authHandler, jwtService, swipeHandler)
 
 	err = http.ListenAndServe(":8080", router)
 	if err != nil {

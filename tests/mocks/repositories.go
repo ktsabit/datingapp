@@ -9,6 +9,35 @@ import (
 
 var _ repositories.UserRepositoryInterface = (*MockUserRepository)(nil)
 
+type MockSwipeRepository struct {
+	mock.Mock
+}
+
+func (m *MockSwipeRepository) CreateSwipe(
+	ctx context.Context,
+	userID uint,
+	swipedUserID uint,
+	swipedDirection models.SwipeDirectionEnum,
+) (*models.Swipe, error) {
+	args := m.Called(ctx, userID, swipedUserID, swipedDirection)
+	return args.Get(0).(*models.Swipe), args.Error(1)
+}
+
+func (m *MockSwipeRepository) SwipeMatch(ctx context.Context, swiperID uint, swipedID uint) (*models.Swipe, error) {
+	args := m.Called(ctx, swipedID, swipedID)
+	return args.Get(0).(*models.Swipe), args.Error(1)
+}
+
+func (m *MockSwipeRepository) CheckReverseSwipe(
+	ctx context.Context,
+	userID uint,
+	targetUserID uint,
+	swipedDirection models.SwipeDirectionEnum,
+) (*models.Swipe, error) {
+	args := m.Called(ctx, userID, targetUserID, swipedDirection)
+	return args.Get(0).(*models.Swipe), args.Error(1)
+}
+
 type MockUserRepository struct {
 	mock.Mock
 }

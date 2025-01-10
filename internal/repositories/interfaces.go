@@ -11,3 +11,19 @@ type UserRepositoryInterface interface {
 	GetUserById(id uint) (*models.User, error)
 	EmailExist(ctx context.Context, email string) bool
 }
+
+type SwipeRepositoryInterface interface {
+	CreateSwipe(
+		ctx context.Context,
+		userID uint,
+		swipedUserID uint,
+		swipedDirection models.SwipeDirectionEnum,
+	) (*models.Swipe, error)
+	CheckReverseSwipe(
+		ctx context.Context,
+		swipeID uint,
+		swipeUserID uint,
+		swipeDirection models.SwipeDirectionEnum,
+	) (*models.Swipe, error)
+	SwipeMatch(ctx context.Context, swiperID uint, swipedID uint) (*models.Swipe, error)
+}

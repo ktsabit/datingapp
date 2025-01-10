@@ -24,3 +24,11 @@ type MockUserHandler struct {
 func (m *MockUserHandler) Register(w http.ResponseWriter, r *http.Request) {
 	m.Called(w, r)
 }
+
+type MockSwipeHandler struct {
+	mock.Mock
+}
+
+func (m *MockSwipeHandler) HandleSwipe(w http.ResponseWriter, r *http.Request) {
+	m.Called(w, r)
+}

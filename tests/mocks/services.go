@@ -9,6 +9,20 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
+type MockSwipeService struct {
+	mock.Mock
+}
+
+func (m *MockSwipeService) CreateSwipe(
+	ctx context.Context,
+	userID uint,
+	swipedID uint,
+	swipeDirection models.SwipeDirectionEnum,
+) (*models.Swipe, error) {
+	args := m.Called(ctx, userID, swipedID, swipeDirection)
+	return args.Get(0).(*models.Swipe), args.Error(1)
+}
+
 type MockUserService struct {
 	mock.Mock
 }

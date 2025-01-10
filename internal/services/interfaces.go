@@ -15,3 +15,16 @@ type JWTServiceInterface interface {
 type UserServiceInterface interface {
 	Register(ctx context.Context, userReq models.RegisterRequest) (models.User, error)
 }
+
+type SwipeServiceInterface interface {
+	CreateSwipe(
+		ctx context.Context,
+		userID uint,
+		swipedID uint,
+		swipeDirection models.SwipeDirectionEnum,
+	) (*models.Swipe, error)
+}
+
+type ProfileServiceInterface interface {
+	GenerateFeed(ctx context.Context, userID uint) ([]*models.User, error)
+}

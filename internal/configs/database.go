@@ -23,7 +23,9 @@ func InitDB() *gorm.DB {
 
 	log.Println("Connected to database")
 
-	err = db.AutoMigrate(&models.User{})
+	//db.Exec("CREATE EXTENSION IF NOT EXISTS postgis")
+
+	err = db.AutoMigrate(&models.User{}, &models.Swipe{})
 	if err != nil {
 		log.Fatalf("failed to migrate database: %v", err)
 	}

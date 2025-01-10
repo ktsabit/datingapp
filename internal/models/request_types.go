@@ -20,3 +20,8 @@ type TokenResponse struct {
 	RefreshToken string `json:"refresh_token"`
 	ExpiresIn    int64  `json:"expires_in"` // seconds
 }
+
+type SwipeRequest struct {
+	SwipedUserID    uint               `json:"swiped_user_id"`
+	SwipedDirection SwipeDirectionEnum `json:"swiped_direction"`
+}

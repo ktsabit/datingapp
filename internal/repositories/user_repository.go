@@ -14,6 +14,11 @@ func NewUserRepository(db *gorm.DB) UserRepositoryInterface {
 	return &UserRepositoryImpl{DB: db}
 }
 
+func (r *UserRepositoryImpl) UpdateProfile(user *models.User) error {
+	//TODO implement me
+	panic("implement me")
+}
+
 func (r *UserRepositoryImpl) CreateUser(ctx context.Context, user *models.User) error {
 	return r.DB.WithContext(ctx).Create(user).Error
 }

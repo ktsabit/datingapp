@@ -17,6 +17,7 @@ import (
 func TestSetupRoutes(t *testing.T) {
 	mockUserHandler := new(mocks.MockUserHandler)
 	mockAuthHandler := new(mocks.MockAuthHandler)
+	mockSwipeHandler := new(mocks.MockSwipeHandler)
 	mockJWTService := new(mocks.MockJWTService)
 
 	tokenAuth := jwtauth.New("HS256", []byte("secret"), nil)
@@ -26,7 +27,7 @@ func TestSetupRoutes(t *testing.T) {
 	mockAuthHandler.On("Login", mock.Anything, mock.Anything).Return(nil)
 	mockAuthHandler.On("Refresh", mock.Anything, mock.Anything).Return(nil)
 
-	r := routes.SetupRoutes(mockUserHandler, mockAuthHandler, mockJWTService)
+	r := routes.SetupRoutes(mockUserHandler, mockAuthHandler, mockJWTService, mockSwipeHandler)
 
 	tests := []struct {
 		method       string
