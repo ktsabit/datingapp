@@ -5,10 +5,8 @@ import random
 import sys
 import bcrypt
 
-# Initialize Faker
 fake = Faker()
 
-# Database connection parameters
 DB_PARAMS = {
     'dbname': 'datingapp',
     'user': 'admin',
@@ -17,17 +15,14 @@ DB_PARAMS = {
     'port': '5432'
 }
 
-# Constants
 GENDERS = ['Male', 'Female']
-# Coordinates roughly covering Indonesia
-LAT_RANGE = (-11.0, 6.0)  # Indonesian latitude range
-LON_RANGE = (95.0, 141.0) # Indonesian longitude range
+LAT_RANGE = (-11.0, 6.0)
+LON_RANGE = (95.0, 141.0)
 
 def create_connection():
     """Create a database connection with PostGIS support"""
     try:
         conn = psycopg2.connect(**DB_PARAMS)
-        # Enable PostGIS if not enabled
         with conn.cursor() as cur:
             cur.execute("CREATE EXTENSION IF NOT EXISTS postgis;")
             conn.commit()
@@ -59,7 +54,7 @@ def generate_profile_data():
         'bio': fake.text(max_nb_chars=300),
         'age': random.randint(18, 65),
         'gender': random.choice(GENDERS),
-        'location': f'SRID=4326;POINT({lon} {lat})'  # PostGIS point with SRID
+        'location': f'SRID=4326;POINT({lon} {lat})'
     }
 
 def generate_preference_data():
@@ -77,7 +72,7 @@ def generate_from_password(password: bytes, cost: int) -> str:
 
     try:
         hashed_password = bcrypt.hashpw(password, bcrypt.gensalt(cost))
-        return hashed_password.decode('utf-8')  # Convert bytes to UTF-8 string
+        return hashed_password.decode('utf-8')
     except Exception as e:
         raise e
 
@@ -106,7 +101,6 @@ def insert_data(conn, num_records=10):
                 )
                 user_id = cur.fetchone()[0]
 
-                # Insert profile
                 profile = generate_profile_data()
                 cur.execute("""
                     INSERT INTO profiles
@@ -120,7 +114,6 @@ def insert_data(conn, num_records=10):
                     )
                 )
 
-                # Insert preference
                 pref = generate_preference_data()
                 cur.execute("""
                     INSERT INTO preferences
