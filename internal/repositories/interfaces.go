@@ -26,4 +26,6 @@ type SwipeRepositoryInterface interface {
 		swipeDirection models.SwipeDirectionEnum,
 	) (*models.Swipe, error)
 	SwipeMatch(ctx context.Context, swiperID uint, swipedID uint) (*models.Swipe, error)
+	IncrementDailySwipe(ctx context.Context, userID uint) (int64, error)
+	//GetDailySwipe(ctx context.Context, userID uint) (int64, error)
 }

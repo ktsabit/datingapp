@@ -27,10 +27,11 @@ func main() {
 	})
 
 	db := configs.InitDB()
+	rdb := configs.InitRedis()
 	userRepo := repositories.NewUserRepository(db)
-	swipeRepo := repositories.NewSwipeRepository(db)
+	swipeRepo := repositories.NewSwipeRepository(db, rdb)
 	userService := services.NewUserService(userRepo)
-	swipeService := services.NewSwipeService(swipeRepo)
+	swipeService := services.NewSwipeService(swipeRepo, userRepo)
 	userHandler := handlers.NewUserHandler(userService)
 	swipeHandler := handlers.NewSwipeHandler(swipeService)
 	authHandler := handlers.NewAuthHandler(userRepo, jwtService)
