@@ -24,6 +24,32 @@
 ├── README.md          
 ```
 
+### internal/
+This directory contains almost all app logic, internal/ is being used here instead of pkg/ because the code are not meant to be shared across projects.
+
+#### configs/
+This is the database (SQL) and redis connection configuration directory.
+
+#### repositories/
+The repository layer responsible for handling data from/to the data sources such as SQL and redis.
+
+#### models/
+Contains model definition of entities. The models here are defined using gorm.
+
+#### handlers/
+The functions directly tied to routes to handle each specific endpoints.
+
+#### services/
+This is an intermediary layer between handler and repository. The business logic will take place here. 
+
+#### routes/
+The routes/routes.go file defines API endpoints and handles parameter passing with middleware. The URLs also grouped and protected from unauthenticated users.
+
+### deployments/
+The directory responsible for defining docker configs.
+
+### tests/
+Includes mocks for some handlers, services, and repositories for unit testing. More on unit testing on documentation.
 ## Running the Project
 
 ### Prerequisites
@@ -41,7 +67,13 @@
    ```
    go mod download
    ```
-3. Run the development server:
+3. Configure the database: Add the following credentials to the DB
+   ```
+   db: datingapp
+   user: admin
+   pass: admin123
+   ```
+4. Run the development server:
    ```
    go run cmd/datingapp/main.go
    ```
@@ -53,7 +85,7 @@
 ### Running Tests
 To execute unit tests run the following command:
 ```
-go test
+go test ./tests/...  -v
 ```
 
 ## Deploy the App with Docker
